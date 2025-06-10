@@ -1,9 +1,42 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { clearSuccess } from "../JS/actions/authActions";
+import "react-toastify/dist/ReactToastify.css";
 
-const SuccessNotif = () => {
+const SuccessNotif = ({ success }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (success?.msg) {
+      toast.success(success.msg, { toastId: "success-toast" });
+
+      const timeout = setTimeout(() => {
+        dispatch(clearSuccess());
+      }, 3000);
+
+      return () => clearTimeout(timeout); // cleanup
+    }
+  }, [success, dispatch]);
+
   return (
-    <div>SuccessNotif</div>
-  )
-}
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar={true}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        pauseOnHover
+        draggable
+        className="toast-text"
+        theme="dark"
+        limit={1}
+      />
+    </>
+  );
+};
 
-export default SuccessNotif
+export default SuccessNotif;

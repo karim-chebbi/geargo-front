@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -12,25 +12,57 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Logo from './components/Logo'
 import Settings from './pages/Settings'
+import { useDispatch, useSelector } from 'react-redux'
+import { currentUser } from './JS/actions/authActions'
+import SuccessNotif from './components/SuccessNotif'
+import ErrorsNotif from './components/ErrorNotif'
+import "react-toastify/dist/ReactToastify.css";
+import CarDescription from './pages/carDescription'
 
 const App = () => {
+
+  const dispatch = useDispatch()
+
+  const isAuth = useSelector((state) => state.authReducer.isAuth)
+
+  useEffect(() => {
+      if (localStorage.getItem("token")) {
+        dispatch(currentUser())
+      }
+  }, [dispatch])
+
+    const authSuccess = useSelector((state) => state.authReducer.success);
+    const authErrors = useSelector((state) => state.authReducer.errors);
+
+    console.log(authSuccess)
+    console.log(authErrors)
+  
   return (
     <>
-    <Navbar />
+      <Navbar />
+      {authSuccess &&
+        authSuccess.map((success) => (
+          <SuccessNotif key={success.id} success={success} />
+        ))}
+      {authErrors &&
+        authErrors.map((error) => (
+          <ErrorsNotif key={error.id} error={error} />
+        ))}
       <Routes>
-       <Route path="/" element={ <Home /> }  />
-       <Route path="/login" element={ <Login /> }  />
-       <Route path="/register" element={ <Register /> }  />
-       <Route path="/profile" element={ <Profile /> }  />
-       <Route path="/showroom" element={ <Showroom /> }  />
-       <Route path="/contact" element={ <Contact /> }  />
-       <Route path="/settings" element={ <Settings /> }  />
-       <Route path="/dashboard" element={ <Dashboard /> }  />
-       <Route path="/*" element={ <NotFound /> }  />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        {isAuth && <Route path="/profile" element={<Profile />} />}
+        {isAuth && <Route path="/showroom" element={<Showroom />} />}
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/carDescription/:id" element={<CarDescription />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>
-  )
+  );
 }
 
 export default App

@@ -1,14 +1,27 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loginAction } from "../JS/actions/authActions";
+
 export default function Login() {
+    const [user, setUser] = useState({});
+
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+
+    const handleInputChange = (e) => {
+      setUser({ ...user, [e.target.name]: e.target.value });
+    };
+
+    const handleLogin = (e) => {
+      e.preventDefault();
+      dispatch(loginAction(user, navigate));
+    };
+
+    // console.log(user);
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -22,7 +35,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -32,6 +45,7 @@ export default function Login() {
               </label>
               <div className="mt-2">
                 <input
+                  onChange={(e) => handleInputChange(e)}
                   id="email"
                   name="email"
                   type="email"
@@ -61,6 +75,7 @@ export default function Login() {
               </div>
               <div className="mt-2">
                 <input
+                  onChange={(e) => handleInputChange(e)}
                   id="password"
                   name="password"
                   type="password"
