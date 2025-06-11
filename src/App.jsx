@@ -18,12 +18,16 @@ import SuccessNotif from './components/SuccessNotif'
 import ErrorsNotif from './components/ErrorNotif'
 import "react-toastify/dist/ReactToastify.css";
 import CarDescription from './pages/carDescription'
+import Loading from './components/Loading'
+import ScrollToTop from './components/ScrollToTop'
 
 const App = () => {
 
   const dispatch = useDispatch()
 
   const isAuth = useSelector((state) => state.authReducer.isAuth)
+
+  const isLoading = useSelector((state) => state.carReducer.load)
 
   useEffect(() => {
       if (localStorage.getItem("token")) {
@@ -34,26 +38,36 @@ const App = () => {
     const authSuccess = useSelector((state) => state.authReducer.success);
     const authErrors = useSelector((state) => state.authReducer.errors);
 
-    console.log(authSuccess)
-    console.log(authErrors)
+    const carSuccess = useSelector((state) => state.carReducer.success);
+    const carErrors = useSelector((state) => state.carReducer.errors);
+
+    
   
   return (
     <>
       <Navbar />
+      <ScrollToTop /> 
+      
       {authSuccess &&
         authSuccess.map((success) => (
           <SuccessNotif key={success.id} success={success} />
         ))}
       {authErrors &&
-        authErrors.map((error) => (
-          <ErrorsNotif key={error.id} error={error} />
+        authErrors.map((error) => <ErrorsNotif key={error.id} error={error} />)}
+
+      {carSuccess &&
+        carSuccess.map((success) => (
+          <SuccessNotif key={success.id} success={success} />
         ))}
+      {carErrors &&
+        carErrors.map((error) => <ErrorsNotif key={error.id} error={error} />)}
+      {isLoading && <Loading />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {isAuth && <Route path="/profile" element={<Profile />} />}
-        {isAuth && <Route path="/showroom" element={<Showroom />} />}
+        {isAuth &&  <Route path="/showroom" element={<Showroom />} />}
         <Route path="/contact" element={<Contact />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/dashboard" element={<Dashboard />} />

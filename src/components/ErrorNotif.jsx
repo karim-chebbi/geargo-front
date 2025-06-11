@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { clearErrors } from "../JS/actions/authActions";
 import "react-toastify/dist/ReactToastify.css";
+import { clearErrorsCar } from "../JS/actions/carActions";
 
 const ErrorNotif = ({ error }) => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const ErrorNotif = ({ error }) => {
 
       const timeout = setTimeout(() => {
         dispatch(clearErrors());
+        dispatch(clearErrorsCar())
       }, 3000);
 
       return () => clearTimeout(timeout); // cleanup on unmount or error change

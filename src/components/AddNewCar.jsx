@@ -1,4 +1,7 @@
-import { EditOutlined } from '@ant-design/icons';
+import React, { useState } from "react";
+import {PlusCircleOutlined} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
+import {useDispatch} from "react-redux";
 import {
   Button,
   Modal,
@@ -12,74 +15,69 @@ import {
   Switch,
   Upload,
 } from "antd";
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import { PlusOutlined } from "@ant-design/icons";
-import { useDispatch } from 'react-redux';
-import { editCar } from '../JS/actions/carActions';
+import { useNavigate } from "react-router-dom";
+import { addCar } from "../JS/actions/carActions";
+
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-const EditCar = ({car}) => {
-
-
-      const [updatedCar, setUpdatedCar] = useState(car);
+const AddNewCar = () => {
+    const [newCar, setNewCar] = useState({})
 
       const [isModalOpen, setIsModalOpen] = useState(false);
 
-      const {id} = useParams()
+      const dispatch = useDispatch()
 
-      const dispatch = useDispatch();
-
-        useEffect(() => {
-          if (car) {
-            setUpdatedCar(car);
-          }
-        }, [car]);
-
-                const showModal = () => {
-                  setIsModalOpen(true);
-                };
-                const handleCancel = () => {
-                  setIsModalOpen(false);
-                };
+      const navigate = useNavigate();
 
 
-                     const handleInputChange = (eOrName, value) => {
-                       if (typeof eOrName === "object" && eOrName?.target) {
-                         // For standard inputs (Input, Select)
-                         const { name, value } = eOrName.target;
-                         setUpdatedCar((prev) => ({ ...prev, [name]: value }));
-                       } else {
-                         // For custom components (DatePicker, ColorPicker, InputNumber, etc.)
-                         const name = eOrName;
-                         setUpdatedCar((prev) => ({ ...prev, [name]: value }));
-                       }
-                     };
+            const showModal = () => {
+              setIsModalOpen(true);
+            };
+            const handleCancel = () => {
+              setIsModalOpen(false);
+            };
 
-                     const handleEditCar = (e) => {
-                       e.preventDefault();
-                       dispatch(editCar(id, updatedCar));
-                       setIsModalOpen(false);
-                     };
+     const handleInputChange = (eOrName, value) => {
+       if (typeof eOrName === "object" && eOrName?.target) {
+         // For standard inputs (Input, Select)
+         const { name, value } = eOrName.target;
+         setNewCar((prev) => ({ ...prev, [name]: value }));
+       } else {
+         // For custom components (DatePicker, ColorPicker, InputNumber, etc.)
+         const name = eOrName;
+         setNewCar((prev) => ({ ...prev, [name]: value }));
+       }
+     };
 
 
-            console.log(updatedCar)
+         const handleAddCar = (e) => {
+           e.preventDefault();
+           dispatch(addCar(newCar));
+           setIsModalOpen(false);
+         };
+
+
+
+
+
+
+    
   return (
     <>
       <Button
         color="default"
-        variant="solid"
+        variant="outlined"
         onClick={showModal}
-        icon={<EditOutlined />}
+        icon={<PlusCircleOutlined />}
       >
-        Edit car
+        Add new Car
       </Button>
       <Modal
         title="Adding new car"
         closable={{ "aria-label": "Custom Close Button" }}
         open={isModalOpen}
-        onOk={handleEditCar}
+        onOk={handleAddCar}
         onCancel={handleCancel}
       >
         <Form
@@ -93,25 +91,13 @@ const EditCar = ({car}) => {
           </Form.Item> */}
 
           <Form.Item label="Make">
-            <Input
-              value={updatedCar.make}
-              name="make"
-              onChange={handleInputChange}
-            />
+            <Input name="make" onChange={handleInputChange} />
           </Form.Item>
           <Form.Item label="Model">
-            <Input
-              value={updatedCar.model}
-              name="model"
-              onChange={handleInputChange}
-            />
+            <Input name="model" onChange={handleInputChange} />
           </Form.Item>
           <Form.Item label="Fuel">
-            <Radio.Group
-              value={updatedCar.fuel}
-              name="fuel"
-              onChange={handleInputChange}
-            >
+            <Radio.Group name="fuel" onChange={handleInputChange}>
               <Radio value="Petrol"> Petrol </Radio>
               <Radio value="Diesel"> Diesel </Radio>
               <Radio value="Electric"> Electric </Radio>
@@ -119,16 +105,11 @@ const EditCar = ({car}) => {
             </Radio.Group>
           </Form.Item>
           <Form.Item label="Image">
-            <Input
-              value={updatedCar.image}
-              name="image"
-              onChange={handleInputChange}
-            />
+            <Input name="image" onChange={handleInputChange} />
           </Form.Item>
 
           <Form.Item label="year">
             <DatePicker
-              
               picker="year"
               name="year"
               onChange={(date, dateString) =>
@@ -139,7 +120,6 @@ const EditCar = ({car}) => {
 
           <Form.Item label="price">
             <InputNumber
-              value={updatedCar.price}
               onChange={(value) => handleInputChange("price", value)}
             />
           </Form.Item>
@@ -174,7 +154,6 @@ const EditCar = ({car}) => {
 
           <Form.Item label="color">
             <ColorPicker
-              value={updatedCar.color}
               picker="color"
               onChange={(color, hex) => handleInputChange("color", hex)}
             />
@@ -188,4 +167,4 @@ const EditCar = ({car}) => {
   );
 }
 
-export default EditCar
+export default AddNewCar

@@ -34,6 +34,12 @@ export default function Navbar() {
      };
    }, []);
 
+
+     const handleLogout = () => {
+       dispatch(lougoutUser());
+       navigate("/login"); // Now this will work correctly
+     };
+
   return (
     <nav className="sticky top-0 z-50 bg-white shadow" ref={dropdownRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,12 +57,14 @@ export default function Navbar() {
             >
               Home
             </Link>
-            {isAuth && <Link
-              to="/showroom"
-              className="px-3 py-2 rounded hover:bg-gray-100 text-gray-700"
-            >
-              Showroom
-            </Link>}
+            {isAuth && (
+              <Link
+                to="/showroom"
+                className="px-3 py-2 rounded hover:bg-gray-100 text-gray-700"
+              >
+                Showroom
+              </Link>
+            )}
             <Link
               to="/contact"
               className="px-3 py-2 rounded hover:bg-gray-100 text-gray-700"
@@ -120,7 +128,7 @@ export default function Navbar() {
                         Settings
                       </Link>
                       <Link
-                        onClick={() => dispatch(lougoutUser(navigate))}
+                        onClick={handleLogout}
                         className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Disconnect
@@ -161,12 +169,14 @@ export default function Navbar() {
           >
             Home
           </Link>
-          {isAuth && <Link
-            to="/showroom"
-            className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
-          >
-            Showroom
-          </Link>}
+          {isAuth && (
+            <Link
+              to="/showroom"
+              className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
+            >
+              Showroom
+            </Link>
+          )}
           <Link
             to="/contact"
             className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
@@ -211,7 +221,7 @@ export default function Navbar() {
                 Settings
               </Link>
               <Link
-                onClick={() => dispatch(lougoutUser(navigate))}
+                onClick={handleLogout}
                 className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
               >
                 Disconnect

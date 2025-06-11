@@ -12,9 +12,8 @@ export const registerAction = (newUser, navigate) => async (dispatch) => {
     }
 } 
 
-export const lougoutUser = (navigate) => async (dispatch) => {
+export const lougoutUser = () => async (dispatch) => {
     dispatch({type: LOGOUT_USER})
-    navigate("/login");
 }
 
 export const loginAction = (user, navigate) => async (dispatch) => {

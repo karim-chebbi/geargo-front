@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { clearSuccess } from "../JS/actions/authActions";
 import "react-toastify/dist/ReactToastify.css";
+import { clearSuccessCar } from "../JS/actions/carActions";
 
 const SuccessNotif = ({ success }) => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const SuccessNotif = ({ success }) => {
 
       const timeout = setTimeout(() => {
         dispatch(clearSuccess());
+        dispatch(clearSuccessCar())
       }, 3000);
 
       return () => clearTimeout(timeout); // cleanup
@@ -23,7 +25,7 @@ const SuccessNotif = ({ success }) => {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={1500}
+        autoClose={3000}
         hideProgressBar={true}
         newestOnTop={true}
         closeOnClick
